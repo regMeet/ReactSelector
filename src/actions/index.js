@@ -12,6 +12,10 @@ export function getData (partialName) {
         {
           "name": partialName+"b",
           "id": "2"
+        },
+        {
+          "name": partialName+"c",
+          "id": "3"
         }
       ]
     }

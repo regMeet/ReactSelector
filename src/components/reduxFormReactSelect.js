@@ -1,25 +1,47 @@
 import React, { Component } from 'react';
-import SelectInputAsync from './SelectInputAsync';
+import SelectInput from './SelectInput';
 import { Field, reduxForm } from 'redux-form'
 import { getData } from '../actions';
 import { connect } from 'react-redux';
 
 class ReduxFormReactSelect extends Component {
 
-  logChange = (val) => {
-    console.log("Selected: " + JSON.stringify(val));
-  }
+  // componentDidMount(){
+      // TODO: load initial data
+  // }
 
   onFormSubmit = (event) => {
     event.preventDefault();
     console.log('event', event);
+    // TODO: print values
+  }
+
+  handleOnChange = (event) => {
+    // console.log('handleOnChange: ', event);
+    // TODO: update reducer
+  }
+
+  handleOnInputChange = (newValue) => {
+    this.props.getData(newValue);
   }
 
   render() {
+    const { handleSubmit, pristine, reset, submitting } = this.props;
+
     return (
       <div>
         <form onSubmit={this.onFormSubmit} >
-          <Field name="country" component={SelectInputAsync} url='https://api.myjson.com/bins/4gzai'  />
+
+          <Field name="data" component={SelectInput} options={this.props.data}
+                 handleOnChange={this.handleOnChange} handleOnInputChange={this.handleOnInputChange} />
+
+          <button type="submit" disabled={submitting}>
+            Enviar nuevos datos
+          </button>
+
+          <button type="button" disabled={pristine || submitting} onClick={reset}>
+            Volver valores
+          </button>
         </form>
 
       </div>
@@ -29,7 +51,8 @@ class ReduxFormReactSelect extends Component {
 
 function mapStateToProps(state) {
   return {
-    streets: state.dataReducer.streets
+    data: state.dataReducer.data,
+    initialValues: state.dataReducer.initial
   }
 }
 
