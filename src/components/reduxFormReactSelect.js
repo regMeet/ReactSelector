@@ -3,6 +3,7 @@ import SelectInput from './SelectInput';
 import { Field, reduxForm } from 'redux-form'
 import { getDataSelector, getInitialData } from '../actions';
 import { connect } from 'react-redux';
+import { alphaNumeric, required, phoneNumber, email, number } from '../utils/validator'
 
 class ReduxFormReactSelect extends Component {
 
@@ -27,6 +28,8 @@ class ReduxFormReactSelect extends Component {
     event.preventDefault();
     console.log('event', event);
     // TODO: print values
+
+    console.log('initialValues', this.props.initialValues);
   }
 
   handleOnChange = (event) => {
@@ -38,6 +41,28 @@ class ReduxFormReactSelect extends Component {
     this.props.getDataSelector(newValue);
   }
 
+  renderField = ( {input, label, placeholder, type, meta: { touched, error, warning } }) => {
+    return (
+      <div>
+        <label>
+          {label}
+        </label>
+        <div>
+          <input {...input} placeholder={placeholder} type={type} />
+          {touched &&
+          ((error &&
+            <span>
+            {error}
+          </span>) ||
+            (warning &&
+              <span>
+              {warning}
+            </span>))}
+        </div>
+      </div>
+    );
+  };
+
   render() {
     const { handleSubmit, pristine, reset, submitting } = this.props;
 
@@ -45,8 +70,22 @@ class ReduxFormReactSelect extends Component {
       <div>
         <form onSubmit={this.onFormSubmit} >
 
-          <Field name="detail" component={SelectInput} options={this.props.data}
-                 handleOnChange={this.handleOnChange} handleOnInputChange={this.handleOnInputChange} />
+          <Field
+            name="detail.selector"
+            component={SelectInput}
+            options={this.props.data}
+            handleOnChange={this.handleOnChange}
+            handleOnInputChange={this.handleOnInputChange}
+          />
+
+          <Field
+            name="detail.normal"
+            type="text"
+            component={this.renderField}
+            label="Número:"
+            validate={[required, alphaNumeric]}
+            warn={alphaNumeric}
+          />
 
           <button type="submit" disabled={submitting}>
             Enviar nuevos datos
@@ -63,7 +102,7 @@ class ReduxFormReactSelect extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log('state.dataReducer.initial', state.dataReducer.initial)
+  // console.log('state.dataReducer.initial', state.dataReducer.initial)
 
   return {
     data: state.dataReducer.data,

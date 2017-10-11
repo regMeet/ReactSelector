@@ -28,8 +28,11 @@ export function getInitialData(partialName) {
     type: INITIAL_DATA,
     payload: {
       "detail": {
-        "name": "alan",
-        "id": "12345"
+        "selector": {
+          "name": "alan",
+          "id": "12345"
+        },
+        "normal": "field"
       }
     }
   }
