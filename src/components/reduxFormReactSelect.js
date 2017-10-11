@@ -6,8 +6,21 @@ import { connect } from 'react-redux';
 
 class ReduxFormReactSelect extends Component {
 
-  componentDidMount(){
+  constructor(props){
+    super(props);
+
     this.props.getInitialData();
+    console.log('this.props.initialValues.detail constructor', this.props.initialValues);
+  }
+
+  componentDidMount(){
+    //this.props.getInitialData();
+    console.log('this.props.initialValues.detail componentDidMount', this.props.initialValues);
+    // this.props.getDataSelector(this.props.initialValues.detail);
+  }
+
+  componentWillMount(){
+    console.log('this.props.initialValues.detail 222', this.props.initialValues);
   }
 
   onFormSubmit = (event) => {

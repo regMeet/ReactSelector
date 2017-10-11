@@ -10,35 +10,42 @@ class SelectInput extends Component {
 
     this.state = {
       value: null,
+      options: []
     }
   }
 
-  componentDidMount(){
-    const initialValue = this.props.input.value;
-    console.log('initialValue: ', initialValue);
-
-    if (initialValue) {
-      this.props.handleOnInputChange(initialValue.label);
+  componentWillReceiveProps({input: {value}, options}){
+    if (value && options && options.length === 0){
+      this.props.handleOnInputChange(value.label);
     }
+    // FIXME: do I have to call setState?
+    // const {input: {onChange}} = this.props;
+    // this.setState({value: value, options:options}, () => onChange(value));
   }
 
   onChange(object) {
     console.log(object);
 
+    // const {input: {onChange}} = this.props;
+    // const selectedValue = object.value; //object can be null when it's cleared
+    // onChange(selectedValue);
+
     const {input: {onChange}} = this.props;
-    const selectedValue = object.value;
+    if (this.props.input.onChange && object != null) {
+      // To be aligned with how redux-form publishes its CHANGE action payload. The event received is an object with 2 keys: "value" and "label"
 
-    this.setState({value: selectedValue}, () => onChange(selectedValue));
-    // if (this.props.input.onChange && object != null) {
-    //   console.log('changed: ', object.value);
-    //   // To be aligned with how redux-form publishes its CHANGE action payload. The event received is an object with 2 keys: "value" and "label"
-    //   this.props.input.onChange(object.value);
-    // } else {
-    //   console.log('cleared');
-    //   // Clear the input field
-    //   this.props.input.onChange(null)
-    // }
+      //this.props.input.onChange(object.value);
+      var selectedValue = object.value;
+      console.log('selectedValue: ', selectedValue);
 
+    } else {
+      console.log('cleared');
+      // Clear the input field
+      // this.props.input.onChange(null)
+      var selectedValue = null;
+    }
+    this.setState({value: selectedValue, options:[]}, () => onChange(selectedValue));
+    // FIXME: once selected it, should I reset the main options?
     //this.props.handleOnChange(object);
   }
 
@@ -46,6 +53,7 @@ class SelectInput extends Component {
     object && this.props.handleOnInputChange(object);
   }
 
+  //FIXME: update options when input value changed and options is empty - initial values
   render() {
     return (
       <Select {...this.props }
@@ -53,7 +61,7 @@ class SelectInput extends Component {
               onBlur = {() => this.props.input.onBlur(this.props.input.value) }
               onChange = { this.onChange.bind(this) }
               onInputChange = { this.onInputChange.bind(this) }
-              options={this.props.options}
+              options={ this.props.options}
       />
     );
   }
