@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import SelectInput from './SelectInput';
 import { Field, reduxForm } from 'redux-form'
-import { getData } from '../actions';
+import { getDataSelector, getInitialData } from '../actions';
 import { connect } from 'react-redux';
 
 class ReduxFormReactSelect extends Component {
 
-  // componentDidMount(){
-      // TODO: load initial data
-  // }
+  componentDidMount(){
+    this.props.getInitialData();
+  }
 
   onFormSubmit = (event) => {
     event.preventDefault();
@@ -22,7 +22,7 @@ class ReduxFormReactSelect extends Component {
   }
 
   handleOnInputChange = (newValue) => {
-    this.props.getData(newValue);
+    this.props.getDataSelector(newValue);
   }
 
   render() {
@@ -32,7 +32,7 @@ class ReduxFormReactSelect extends Component {
       <div>
         <form onSubmit={this.onFormSubmit} >
 
-          <Field name="data" component={SelectInput} options={this.props.data}
+          <Field name="detail" component={SelectInput} options={this.props.data}
                  handleOnChange={this.handleOnChange} handleOnInputChange={this.handleOnInputChange} />
 
           <button type="submit" disabled={submitting}>
@@ -50,6 +50,8 @@ class ReduxFormReactSelect extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log('state.dataReducer.initial', state.dataReducer.initial)
+
   return {
     data: state.dataReducer.data,
     initialValues: state.dataReducer.initial
@@ -60,4 +62,4 @@ ReduxFormReactSelect = reduxForm({
   form: 'fieldLevelValidation' // a unique identifier for this form
 })(ReduxFormReactSelect)
 
-export default connect(mapStateToProps, { getData })(ReduxFormReactSelect);
+export default connect(mapStateToProps, { getDataSelector, getInitialData })(ReduxFormReactSelect);

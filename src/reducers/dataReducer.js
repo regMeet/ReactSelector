@@ -1,13 +1,8 @@
-import {DATA_SELECT} from '../actions';
+import {DATA_SELECT, INITIAL_DATA} from '../actions';
 
 const INITIAL_STATE = {
   data: [],
-  initial: {
-    detail: {
-      label: 'alan',
-      value: 12345
-    }
-  }
+  initial: null
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -24,10 +19,20 @@ export default function (state = INITIAL_STATE, action) {
       return {...state, data: dataOptions};
 
     case INITIAL_DATA:
-      var data = action.payload.data;
-      // TODO: update
+      const data = action.payload;
 
-      return {...state, initial: data};
+      const dataParsed = {
+        ...data,
+        detail: {
+          label: data.detail.name,
+          value: data.detail.id,
+        }
+      };
+
+      return {
+        ...state,
+        initial: dataParsed
+      };
 
     default:
       return state;

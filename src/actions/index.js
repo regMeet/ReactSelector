@@ -1,6 +1,7 @@
 export const DATA_SELECT = 'DATA_SELECT';
+export const INITIAL_DATA = 'INITIAL_DATA';
 
-export function getData (partialName) {
+export function getDataSelector (partialName) {
   return {
     type: DATA_SELECT,
     payload: {
@@ -20,6 +21,16 @@ export function getData (partialName) {
       ]
     }
   }
+}
 
-
+export function getInitialData(partialName) {
+  return {
+    type: INITIAL_DATA,
+    payload: {
+      "detail": {
+        "name": "alan",
+        "id": "12345"
+      }
+    }
+  }
 }
