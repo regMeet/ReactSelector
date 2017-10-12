@@ -10,6 +10,7 @@ class SelectInput extends Component {
 
   onInputChange(object) {
     this.props.handleInputChange(object);
+    return object;
   }
 
   render() {
