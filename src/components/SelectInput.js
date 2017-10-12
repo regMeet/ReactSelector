@@ -5,14 +5,7 @@ class SelectInput extends Component {
 
   onChange(object) {
     const {input: {onChange}} = this.props;
-    if (onChange && object != null) {
-      // To be aligned with how redux-form publishes its CHANGE action payload. The event received is an object with 2 keys: "value" and "label"
-      var selectedValue = object;
-    } else {
-      // Clear the input field
-      var selectedValue = null;
-    }
-    onChange(selectedValue);
+    onChange(object);
   }
 
   onInputChange(object) {
