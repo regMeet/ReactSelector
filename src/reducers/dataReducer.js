@@ -9,25 +9,17 @@ export default function (state = INITIAL_STATE, action) {
   switch (action.type){
     case DATA_SELECT:
       var data = action.payload.data;
-
       const dataOptions = data.map(d => getDataParsed(d));
-
       return {...state, data: dataOptions};
 
     case INITIAL_DATA:
       const data = action.payload;
-
       const dataParsed = getInformationParsed(data);
-
-      return {
-        ...state,
-        initial: dataParsed
-      };
+      return {...state, initial: dataParsed };
 
     default:
       return state;
   }
-
 }
 
 const getInformationParsed = data => {

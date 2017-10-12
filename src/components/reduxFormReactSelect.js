@@ -9,36 +9,39 @@ class ReduxFormReactSelect extends Component {
 
   constructor(props){
     super(props);
-
     this.props.getInitialData();
-    console.log('this.props.initialValues.detail constructor', this.props.initialValues);
   }
 
-  componentDidMount(){
-    //this.props.getInitialData();
-    console.log('this.props.initialValues.detail componentDidMount', this.props.initialValues);
-    // this.props.getDataSelector(this.props.initialValues.detail);
+  onFormSubmit = (values) => {
+    console.log('handleSubmit selector: ', values.detail.selector);
+    console.log('handleSubmit normal: ', values.detail.normal);
+    console.log(' ');
   }
 
-  componentWillMount(){
-    console.log('this.props.initialValues.detail 222', this.props.initialValues);
-  }
-
-  onFormSubmit = (event) => {
-    event.preventDefault();
-    console.log('event', event);
-    // TODO: print values
-
-    console.log('initialValues', this.props.initialValues);
-  }
-
-  handleOnChange = (event) => {
-    // console.log('handleOnChange: ', event);
-    // TODO: update reducer
-  }
-
-  handleOnInputChange = (newValue) => {
-    this.props.getDataSelector(newValue);
+  renderSelectorField =  ({input, label, options, handleInputChange, meta: { touched, error, warning }}) => {
+    return (
+      <div>
+        <label>
+          {label}
+        </label>
+        <div>
+          <SelectInput
+            input={{...input}}
+            options={options}
+            handleInputChange={handleInputChange}
+          />
+          {touched &&
+          ((error &&
+            <span>
+            {error}
+          </span>) ||
+            (warning &&
+              <span>
+              {warning}
+            </span>))}
+        </div>
+      </div>
+    );
   }
 
   renderField = ( {input, label, placeholder, type, meta: { touched, error, warning } }) => {
@@ -68,21 +71,23 @@ class ReduxFormReactSelect extends Component {
 
     return (
       <div>
-        <form onSubmit={this.onFormSubmit} >
+        <form onSubmit={handleSubmit(this.onFormSubmit)} >
 
           <Field
             name="detail.selector"
-            component={SelectInput}
+            component={this.renderSelectorField}
+            label="Selector Field:"
+            validate={[required]}
+            warn={alphaNumeric}
             options={this.props.data}
-            handleOnChange={this.handleOnChange}
-            handleOnInputChange={this.handleOnInputChange}
+            handleInputChange={this.props.getDataSelector}
           />
 
           <Field
             name="detail.normal"
             type="text"
             component={this.renderField}
-            label="Número:"
+            label="Normal Field:"
             validate={[required, alphaNumeric]}
             warn={alphaNumeric}
           />
@@ -102,8 +107,6 @@ class ReduxFormReactSelect extends Component {
 }
 
 function mapStateToProps(state) {
-  // console.log('state.dataReducer.initial', state.dataReducer.initial)
-
   return {
     data: state.dataReducer.data,
     initialValues: state.dataReducer.initial
